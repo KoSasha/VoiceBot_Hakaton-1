@@ -10,14 +10,11 @@ import lombok.*;
 public class DocumentAmount implements JSON {
     private String amount;
 
-    private String currencyCharCode;
-
     @Override
     public void fromJSON(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         DocumentAmount documentAmount = mapper.readValue(json, DocumentAmount.class);
         this.setAmount(documentAmount.getAmount());
-        this.setCurrencyCharCode(documentAmount.getCurrencyCharCode());
     }
 }

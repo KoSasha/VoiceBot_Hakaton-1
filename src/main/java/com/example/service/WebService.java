@@ -1,13 +1,9 @@
 package com.example.service;
 
-import com.example.model.BalanceList;
-import com.example.model.Content;
-import com.example.model.PaymentDocument;
-import com.example.model.StatementStatus;
+import com.example.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -50,14 +46,26 @@ public class WebService {
         return statementStatus;
     }
 
-    // в этой функции кек
+    public ArrayList<PaymentDocument> getLastOperations() {
+        return null;
+    }
+
+    public BalanceList getBalance(String accountId, String statementId) throws JsonProcessingException {
+        final HttpEntity<String> entity = addHeaders();
+        //ResponseEntity<String> response = restTemplate.exchange("https://rumskapt241.open.ru/webapi-2.1/accounts/" + accountId + "/statement/" + statementId + "/print?print=true", HttpMethod.GET, entity, String.class);
+        BalanceList balance = new BalanceList();
+        balance.setEnterBalanceAmountNatCurr("0.0");
+        balance.setOutBalanceAmountNatCurr("79173.55");
+        balance.setDebitAmountNatCurr("490.0");
+        balance.setCreditAmountNatCurr("7966.55");
+        return balance;
+    }
+
     public ArrayList<PaymentDocument> getPaymentDocumentList(String accountId, String statementId, BalanceList balance) throws JsonProcessingException {
         final HttpEntity<String> entity = addHeaders();
-        Integer stId =  Integer.parseInt(statementId) + 1;
-        ResponseEntity<String> response = restTemplate.exchange("https://rumskapt241.open.ru/webapi-2.1/accounts/" + accountId + "/statement/" + stId.toString() + "/print?print=true", HttpMethod.GET, entity, String.class);
-        ArrayList<PaymentDocument> paymentDocuments = null;
-        balance = getBalanceList(response);
-        System.out.println(balance.getCreditAmountNatCurr());
+        System.out.println("https://rumskapt241.open.ru/webapi-2.1/accounts/" + accountId + "/statement/" + statementId + "/print?print=true");
+        ResponseEntity<String> response = restTemplate.exchange("https://rumskapt241.open.ru/webapi-2.1/accounts/" + accountId + "/statement/" + statementId + "/print?print=true", HttpMethod.GET, entity, String.class);
+        ArrayList<PaymentDocument> paymentDocuments = new ArrayList<>();
         return paymentDocuments;
     }
 
